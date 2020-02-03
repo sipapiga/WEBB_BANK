@@ -1,13 +1,11 @@
 <?php
-session_start();
-include 'Database.php';
 class User
 {
     private $db;
 
-    public function __construct()
+    public function __construct($database)
     {
-        $this->db = new Database;
+        $this->db = $database;
     }
 
     public function login($data)
@@ -29,18 +27,12 @@ class User
         }
     }
 
-    public function logout()
-    {
-        unset($_SESSION['username']);
-        session_destroy();
-        header('Location: /WEBB_BANK/index.php');
-    }
-
-    public function getUsers(){
-        $this->db->query('SELECT * FROM users');
+      public function getUsers($id){
+        $this->db->query('SELECT * FROM bank.vw_users WHERE id = :id');
+        $this->db->bind(':id', $id);
   
-        $results = $this->db->resultSet();
+        $result = $this->db->single();
   
-        return $results;
+        return $result;
       }
 }

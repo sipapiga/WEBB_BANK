@@ -1,17 +1,10 @@
 <?php
 
-/*require_once 'vendor/autoload.php';
- $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-$port = getenv('DB_PORT');
-$host = getenv('DB_HOST');
-$user =  getenv('DB_USERNAME');
-$pass =  getenv('DB_PASSWORD');
-$dbname =  getenv('DB_DATABASE'); */
+require_once '../include/config.php';
 
 class Database
 {
-
+   
     private $host = DB_HOST;
     private $user = DB_USER;
     private $pass = DB_PASS;
@@ -76,7 +69,7 @@ class Database
     public function resultSet()
     {
         $this->execute();
-        return $this->stmt->fetchAll(PDO::FETCH_OBJ);
+        return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // Get single record as object
@@ -86,4 +79,7 @@ class Database
         return $this->stmt->fetch(PDO::FETCH_OBJ);
     }
 
+    public function rowCount(){
+        return $this->stmt->rowCount();
+      }
 }

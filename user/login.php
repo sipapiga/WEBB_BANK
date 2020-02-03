@@ -1,7 +1,8 @@
 <?php
 
-include '../config/User.php';
+include '../config/Database.php';
 require '../include/header.php';
+include '../models/User.php';
 
 //session_start();
 if (isset($_POST['submit'])) {
@@ -24,14 +25,15 @@ if (isset($_POST['submit'])) {
     }
 
     if (empty($data['username_err']) && empty($data['password_err'])) {
-       
-        $user = new User();
+        $db = new Database();
+        $user = new User($db);
         $isValidated = $user->login($data);
 
         if ($isValidated) {
-            $_SESSION['username'] = $isValidated->username;
+            $_SESSION['user_name'] = $isValidated->firstName;
+            $_SESSION['user_id'] = $isValidated->id;
             // echo "<h1>".$_SESSION['username']."</h1>";
-            header('Location: /WEBB_BANK/index.php');
+            header('Location: ../pages/dashboard.php');
         } else {
             header('Location: /index.php?msg_err=Det gick inte att logga in');
         }
@@ -40,36 +42,3 @@ if (isset($_POST['submit'])) {
 }
 ?>
 
-<div class="row pt-4 pb-4">
-    <div class="col-md-10 mx-auto">
-        <div class="card card-body bg-light mt-5">
-
-            <h2>Login</h2>
-            <p>Please fill in your credentials to log in</p>
-            <form action="login.php" method="post">
-                <div class="form-group">
-                    <label for="username">Username: <sup>*</sup></label>
-                    <input type="username" name="username" class="form-control form-control-lg
-            <?php echo (!empty($data['username_err'])) ? 'is-invalid' : ''; ?>">
-                    <span class="invalid-feedback"><?php echo $data['username_err']; ?></span>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password: <sup>*</sup></label>
-                    <input type="password" name="password" class="form-control form-control-lg
-            <?php echo (!empty($data['password_err'])) ? 'is-invalid' : ''; ?>">
-                    <span class="invalid-feedback"><?php echo $data['password_err']; ?></span>
-
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <input type="submit" name="submit" value="Login" class="btn btn-success btn-block">
-                    </div>
-
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
-<?php require '../include/footer.php';?>

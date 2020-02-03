@@ -6,17 +6,30 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+    <?php if(isset($_SESSION['user_name'])) : ?>
+      <li class="nav-item">
+            <a class="nav-link" href="<?php echo URLROOT; ?>/pages/dashboard.php">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="<?php echo URLROOT; ?>/pages/transfer.php">Transfer</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="<?php echo URLROOT; ?>/pages/transactions.php">Transactions</a>
+          </li>
+          <?php endif; ?>
+        </ul>
         <ul class="navbar-nav ml-auto">
-        <?php if(isset($_SESSION['username'])) : ?>
+        <?php if(isset($_SESSION['user_name'])) : ?>
             <li class="nav-item">
-              <a class="nav-link"><?php echo $_SESSION['username']; ?></a>
+              <a class="nav-link"><?php echo $_SESSION['user_name']; ?></a>
             </li>
           <li class="nav-item">
               <a class="nav-link" href="<?php echo URLROOT; ?>/user/logout.php">Logout</a>
             </li>
           <?php else : ?>
                      <li class="navbar-item">
-                <a class="nav-link" href="<?php echo URLROOT; ?>/user/login.php">Login</a>
+                <a class="nav-link" href="<?php echo URLROOT; ?>">Login</a>
             </li>
             <?php endif; ?>
         </ul>
