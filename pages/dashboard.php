@@ -14,15 +14,46 @@ $result = $user->getUsers($_SESSION['user_id']);
         <div class="card card-md">
             <div><br>
 
-                <h3> <strong style="padding-left:10px;">Account</strong></h3>
+                <h3> <strong style="padding-left:10px;" class="user" id="<?php echo $result->id ?>">Account</strong></h3>
             </div>
-            <div class="pl-4">
-                <p> <strong>Name: </strong> <?php echo $result->firstName ?> <strong>Lastname: </strong>
-                    <?php echo $result->lastName ?></p>
-                <p> <strong>Telephone number: </strong> <?php echo $result->mobilephone ?></p>
-                <p> <strong>Balance: </strong><?php echo $result->balance ?> SEK</p>
+            <div class="row pl-4">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <strong>Name: </strong>
+                        </div>
+                        <div class="col-md-8">
+                            <?php echo $result->firstName ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <strong>Lastname: </strong>
+                        </div>
+                        <div class="col-md-8">
+                            <?php echo $result->lastName ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <strong>Telephone number: </strong>
+                        </div>
+                        <div class="col-md-8">
+                            <?php echo $result->mobilephone ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <strong>Balance: </strong>
+                        </div>
+                        <div class="col-md-8 mb-4">
+                            <?php echo $result->balance ?>
+                        </div>
+                    </div>
+                   
+                </div>
 
-            </div>
+            </div >
         </div>
     </div>
 </div>

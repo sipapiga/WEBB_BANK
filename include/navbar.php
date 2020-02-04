@@ -15,7 +15,7 @@
             <a class="nav-link" href="<?php echo URLROOT; ?>/pages/transfer.php">Transfer</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="<?php echo URLROOT; ?>/pages/transactions.php">Transactions</a>
+            <a class="nav-link transaction" href="<?php echo URLROOT; ?>/pages/transactions.php?id=<?php echo $_SESSION['user_id']; ?>">Transactions</a>
           </li>
           <?php endif; ?>
         </ul>
