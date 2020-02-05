@@ -9,6 +9,8 @@ class Bank
     public $from;
     public $to;
     public $amount;
+    public $balance;
+    public $num;
 
     public function __construct($database)
     {
@@ -105,7 +107,7 @@ class Bank
 
             $balance = $this->getUserBalance($this->account_id);
             
-            if ($balance > $this->from_amount) {
+            if ($balance['balance'] > $this->from_amount) {
                 // execute query
                 $statement->execute();
                 return true;

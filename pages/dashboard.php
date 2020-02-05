@@ -58,5 +58,4 @@ $result = $user->getUsers($_SESSION['user_account_id']);
     </div>
 </div>
 
-
 <?php require '../include/footer.php';?>

@@ -12,7 +12,7 @@
     </table>
 </div>
 
-<div id="card-transfer">
+<div id="card-transfer" class="pb-5 pt-5">
     <h2>Deposit History</h2>
     <table class='table table-bordered table-hover pt-5'>
         <tr>

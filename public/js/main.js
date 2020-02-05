@@ -30,7 +30,7 @@ $(document).ready(function () {
             body: JSON.stringify({ from_amount: balance, account_id: sender_id, from_currency: "SEK", to_amount: balance, to_account: account_reciever_id, to_currency: "SEK", currency_rate: 1.000, date: "2020-02-01 00:35:07" })
         })
             .then((res) => res.json())
-            .then((data) => $('#info').html('<div class="alert alert-danger fade show alert-dismissible">' + data.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'))
+            .then((data) => $('#info').html('<div class="alert alert-info fade show alert-dismissible">' + data.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'))
     }
 
 
@@ -76,8 +76,6 @@ $(document).ready(function () {
         fetch("http://localhost/WEBB_BANK/api/recipientlist.php")
             .then((res) => res.json())
             .then((data) => {
-                console.log(data.result);
-                let output = '';
                 data.result.forEach(function (recipient) {
 
                     recipientName.options.add(

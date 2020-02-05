@@ -3,9 +3,9 @@ require __DIR__.'/include/header.php';
 
 ?>
 
-<div class="row pt-4 pb-4">
+<div class="row" id="login-div">
     <div class="col-md-10 mx-auto">
-      <div class="card card-body bg-light mt-5">
+      <div class="card card-body bg-light mt-5 pb-5">
 
         <h2>Login</h2>
         <p>Please fill in your credentials to log in</p>
