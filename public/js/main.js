@@ -1,10 +1,10 @@
 $(document).ready(function () {
-    const output1 = document.getElementById('output');
-    const output2 = document.getElementById('output2');
+    const Withdrawal = document.getElementById('output');
+    const deposit = document.getElementById('output2');
     const submit = document.getElementById('submit');
-    const info = document.getElementById('info');
+    const recipientName = document.querySelector("#chooseRecipient");
 
-    if ((output1 && output2) !== null) {
+    if ((Withdrawal && deposit) !== null) {
         getTransaction();
         getDepositTransaction();
 
@@ -14,8 +14,7 @@ $(document).ready(function () {
     }
     function addTransfer(e) {
         e.preventDefault();
-
-        let account_reciever_id = document.getElementById('reciever_id').value;
+        let account_reciever_id = recipientName.options[recipientName.selectedIndex].value;
         let balance = document.getElementById('balance').value;
         let sender_id = $(".transaction").attr("id");
 
@@ -36,7 +35,6 @@ $(document).ready(function () {
         fetch("http://localhost/WEBB_BANK/api/transaction.php")
             .then((res) => res.json())
             .then((data) => {
-                console.log(data.result);
                 let output = '';
                 data.result.forEach(function (transaction) {
                     output += `
@@ -45,11 +43,10 @@ $(document).ready(function () {
                       <td>${transaction.amount}</td>
                       <td>${transaction.from}</td>
                       <td>${transaction.to}</td>
-                    </tr>
-                
+                    </tr>                
                    `
                 });
-                output1.innerHTML = output;
+                Withdrawal.innerHTML = output;
             })
     }
 
@@ -57,20 +54,36 @@ $(document).ready(function () {
         fetch("http://localhost/WEBB_BANK/api/deposit.php")
             .then((res) => res.json())
             .then((data) => {
-                console.log(data.result);
                 let output = '';
-                data.result.forEach(function (transaction) {
+                data.result.forEach(function (deposit) {
                     output += `
                     <tr>
-                      <td>${transaction.date}</td>
-                      <td>${transaction.amount}</td>
-                      <td>${transaction.from}</td>
-                      <td>${transaction.to}</td>
-                    </tr>
-                
+                      <td>${deposit.date}</td>
+                      <td>${deposit.amount}</td>
+                      <td>${deposit.from}</td>
+                      <td>${deposit.to}</td>
+                    </tr>                
                    `
                 });
-                output2.innerHTML = output;
+                deposit.innerHTML = output;
             })
     }
+    getrecipientlist();
+    function getrecipientlist() {
+        fetch("http://localhost/WEBB_BANK/api/recipientlist.php")
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data.result);
+                let output = '';
+                data.result.forEach(function (recipient) {
+
+                    recipientName.options.add(
+                        new Option(recipient.firstname + " " + recipient.lastname, recipient.id)
+
+                    );
+                });
+
+            })
+    }
+
 });

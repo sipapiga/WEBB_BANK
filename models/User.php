@@ -29,22 +29,7 @@ class User
         } catch (\PDOException $e) {
             exit($e->getMessage());
         }
-/*
-$this->db->query('SELECT * FROM users WHERE username = :username');
-// Bind values
-$this->db->bind(':username', $data['username']);
-// Execute
 
-$result = $this->db->single();
-if (empty($result)) {
-return false;
-}
-
-if (($data['password'] == $result->password)) {
-return $result;
-} else {
-return false;
-} */
     }
 
     public function getUsers($id)
@@ -61,11 +46,37 @@ return false;
             exit($e->getMessage());
         }
 
-        /*      $this->db->query('SELECT * FROM bank.vw_users WHERE id = :id');
-    $this->db->bind(':id', $id);
-
-    $result = $this->db->single();
-
-    return $result; */
     }
+
+    public function getRecipient()
+    {
+        $statement = 'SELECT * FROM account JOIN users ON users.id = account.user_id';
+        try {
+            $statement = $this->db->prepare($statement);
+            $statement->execute();
+            $num = $statement->rowCount();
+
+            if ($num > 0) {
+
+                $recipient_arr['data'] = [];
+                while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                    $recipient_list = [
+                        'id' => $user_id,
+                        'firstname' => $firstName,
+                        'lastname' => $lastName,
+
+                    ];
+                    array_push($recipient_arr['data'], $recipient_list);
+                }
+
+                return $recipient_arr['data'];
+            }
+
+        } catch (\PDOException $e) {
+            exit($e->getMessage());
+        }
+
+    }
+
 }
