@@ -1,13 +1,16 @@
 <?php require '../include/header.php';?>
 <div class="row">
     <div class="col-md-10" id="card-transfer">
+ 
+        <div id="info"></div>
+
     <div class="card card-md">
         <div><br>
 
             <strong style="padding-left:10px;">QUICK MONEY TRANSFER</strong>
         </div>
         <div>
-            <form action="/transfer.php?" method="POST" name="transfer" id="transfer">
+            <form action="#" method="POST" name="transfer" id="transfer">
 
                 <table class="table" style="margin-bottom:0px;">
 
@@ -16,7 +19,7 @@
                             <td>
                                 <div class="form-group">
                                     <input type="text" class="form-control" style="margin-bottom:0px; margin-top:0px; "
-                                        name="name" id="name" placeholder="Account Name" required="">
+                                        name="reciever_id" id="reciever_id" placeholder="Account Number" required="">
                                 </div>
                             </td>
 

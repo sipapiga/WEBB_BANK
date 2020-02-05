@@ -35,7 +35,7 @@ if (isset($_POST['submit'])) {
             // echo "<h1>".$_SESSION['username']."</h1>";
             header('Location: ../pages/dashboard.php');
         } else {
-            header('Location: /index.php?msg_err=Det gick inte att logga in');
+            header('Location: /WEBB_BANK/index.php?msg_err=Something went wrong');
         }
 
     }

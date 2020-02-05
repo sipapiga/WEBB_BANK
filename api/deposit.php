@@ -12,7 +12,7 @@ $transaction = new Bank($db);
 
 $user_id = $_SESSION['user_id'] ?? null;
 
-$result = $transaction->readTransaction($user_id );
+$result = $transaction->readDepositTransaction($user_id);
 
 $response = [
     'info' => [
