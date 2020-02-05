@@ -9,7 +9,7 @@
     <ul class="navbar-nav mr-auto">
     <?php if(isset($_SESSION['user_name'])) : ?>
       <li class="nav-item">
-            <a class="nav-link" href="<?php echo URLROOT; ?>/pages/dashboard.php">Home</a>
+            <a class="nav-link" href="<?php echo URLROOT; ?>/pages/dashboard.php">Account</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="<?php echo URLROOT; ?>/pages/transfer.php">Transfer</a>

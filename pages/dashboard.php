@@ -14,7 +14,7 @@ $result = $user->getUsers($_SESSION['user_account_id']);
         <div class="card card-md">
             <div><br>
 
-                <h3> <strong style="padding-left:10px;" class="user" id="<?php echo $result->account_id ?>">Account</strong></h3>
+                <h3> <strong style="padding-left:10px;" class="user" id="<?php echo $result->account_id ?>">Account Infomation</strong></h3>
             </div>
             <div class="row pl-4">
                 <div class="col-md-12">
