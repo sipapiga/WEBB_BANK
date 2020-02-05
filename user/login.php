@@ -28,10 +28,11 @@ if (isset($_POST['submit'])) {
         $db = new Database();
         $user = new User($db);
         $isValidated = $user->login($data);
+        echo var_dump($isValidated);
 
         if ($isValidated) {
             $_SESSION['user_name'] = $isValidated->firstName;
-            $_SESSION['user_id'] = $isValidated->id;
+            $_SESSION['user_account_id'] = $isValidated->account_id;
             // echo "<h1>".$_SESSION['username']."</h1>";
             header('Location: ../pages/dashboard.php');
         } else {

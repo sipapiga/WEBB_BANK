@@ -10,7 +10,7 @@ include_once '../models/Bank.php';
 $db = new Database();
 $transaction = new Bank($db);
 
-$user_id = $_SESSION['user_id'] ?? null;
+$user_id = $_SESSION['user_account_id'] ?? null;
 
 $result = $transaction->readDepositTransaction($user_id);
 

@@ -10,7 +10,7 @@ class User
 
     public function login($data)
     {
-        $statement = 'SELECT * FROM users WHERE username = :username';
+        $statement = 'SELECT *,account.id as account_id FROM users JOIN account ON users.id = account.user_id  WHERE username = :username';
         try {
             $statement = $this->db->prepare($statement);
             $statement->bindValue(':username', $data['username'], PDO::PARAM_STR);
@@ -34,7 +34,7 @@ class User
 
     public function getUsers($id)
     {
-        $statement = 'SELECT * FROM bank.vw_users WHERE id = :id';
+        $statement = 'SELECT * FROM bank.vw_users WHERE account_id = :id';
         try {
             $statement = $this->db->prepare($statement);
             $statement->bindValue(':id', $id, PDO::PARAM_INT);
@@ -50,7 +50,7 @@ class User
 
     public function getRecipient()
     {
-        $statement = 'SELECT * FROM account JOIN users ON users.id = account.user_id';
+        $statement = 'SELECT *,account.id as account_id  FROM account JOIN users ON users.id = account.user_id';
         try {
             $statement = $this->db->prepare($statement);
             $statement->execute();
@@ -62,7 +62,7 @@ class User
                 while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
                     extract($row);
                     $recipient_list = [
-                        'id' => $user_id,
+                        'id' => $account_id,
                         'firstname' => $firstName,
                         'lastname' => $lastName,
 

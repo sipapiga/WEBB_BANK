@@ -9,6 +9,9 @@ $(document).ready(function () {
         getDepositTransaction();
 
     }
+    if (recipientName !== null) {
+        getrecipientlist();
+    }
     if (submit !== null) {
         submit.addEventListener('click', addTransfer);
     }
@@ -68,7 +71,7 @@ $(document).ready(function () {
                 deposit.innerHTML = output;
             })
     }
-    getrecipientlist();
+
     function getrecipientlist() {
         fetch("http://localhost/WEBB_BANK/api/recipientlist.php")
             .then((res) => res.json())

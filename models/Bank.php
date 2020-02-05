@@ -15,13 +15,16 @@ class Bank
         $this->db = $database->getConnection();
     }
 
-    public function readTransaction($id = null)
+    public function readWithdrawalTransaction($id = null)
     {
         // Setup query.
-        $sql = 'SELECT * FROM bank.transactions AS t JOIN users ON users.id=t.from_account WHERE users.id = :userid';
+        $sql = 'SELECT * FROM bank.transactions AS t
+        JOIN account ON account.id =t.from_account
+        JOIN users ON account.user_id = users.id
+        WHERE account.id = :account_id';
 
         $statement = $this->db->prepare($sql);
-        $statement->bindValue(':userid', $id, PDO::PARAM_STR);
+        $statement->bindValue(':account_id', $id, PDO::PARAM_STR);
         $statement->execute();
 
         $num = $statement->rowCount();
@@ -32,7 +35,7 @@ class Bank
             while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
                 extract($row);
                 $transaction_item = [
-                    'id' => $id,
+                    'id' => $transaction_id,
                     'date' => $date,
                     'from' => $firstName,
                     'to' => $to_account,
@@ -48,10 +51,13 @@ class Bank
     public function readDepositTransaction($id = null)
     {
         // Setup query.
-        $sql = 'SELECT * FROM bank.transactions AS t JOIN users ON users.id=t.to_account WHERE users.id = :userid';
+        $sql = 'SELECT * FROM bank.transactions AS t
+        JOIN account ON account.id =t.to_account
+        JOIN users ON account.user_id = users.id
+        WHERE account.id = :account_id';
 
         $statement = $this->db->prepare($sql);
-        $statement->bindValue(':userid', $id, PDO::PARAM_STR);
+        $statement->bindValue(':account_id', $id, PDO::PARAM_STR);
         $statement->execute();
 
         $num = $statement->rowCount();
@@ -62,7 +68,7 @@ class Bank
             while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
                 extract($row);
                 $transaction_item = [
-                    'id' => $id,
+                    'id' => $transaction_id,
                     'date' => $date,
                     'from' => $from_account,
                     'to' => $firstName,
@@ -75,39 +81,52 @@ class Bank
         }
     }
 
-
     public function transfer()
     {
-        try{
+        try {
 
             // Setup query.
             $sql = 'INSERT INTO bank.transactions (from_amount, from_account, from_currency, ' .
-            'to_amount, to_account, to_currency, currency_rate, date) ' .
-            'VALUES (:from_amount, :account_id, :from_currency, :to_amount, ' .
-            ':to_account, :to_currency,  :currency_rate, :date)';
-            
+                'to_amount, to_account, to_currency, currency_rate, date) ' .
+                'VALUES (:from_amount, :account_id, :from_currency, :to_amount, ' .
+                ':to_account, :to_currency,  :currency_rate, :date)';
+
             // Prepare query.
             $statement = $this->db->prepare($sql);
-    
-            $statement-> bindParam(":from_amount", $this->from_amount);
-            $statement-> bindParam(":account_id", $this->account_id);
-            $statement-> bindParam(":to_amount", $this->to_amount);
-            $statement-> bindParam(":to_account", $this->to_account);
-            $statement-> bindParam(":from_currency", $this->from_currency);
-            $statement-> bindParam(":to_currency", $this->to_currency);
-            $statement-> bindParam(":currency_rate", $this->currency_rate);
-            $statement-> bindParam(":date", $this->date);
-               
-            // execute query
-            if ($statement->execute()) {
+
+            $statement->bindParam(":from_amount", $this->from_amount);
+            $statement->bindParam(":account_id", $this->account_id);
+            $statement->bindParam(":to_amount", $this->to_amount);
+            $statement->bindParam(":to_account", $this->to_account);
+            $statement->bindParam(":from_currency", $this->from_currency);
+            $statement->bindParam(":to_currency", $this->to_currency);
+            $statement->bindParam(":currency_rate", $this->currency_rate);
+            $statement->bindParam(":date", $this->date);
+
+            $balance = $this->getUserBalance($this->account_id);
+            
+            if ($balance > $this->from_amount) {
+                // execute query
+                $statement->execute();
                 return true;
+            } else {
+                return false;
             }
-    
-            return false;
-        } catch (PDOException $e) {
-            $this->pdo->rollBack();
-            return 'You dont have enough money';
+
+        } catch (\Exception $error) {
+            throw new \Exception("Failed : " . $error->getMessage());
         }
 
+    }
+
+    public function getUserBalance($id)
+    {
+        $sql = "SELECT balance FROM bank.vw_users WHERE account_id = :id";
+
+        $statement = $this->db->prepare($sql);
+        $statement->bindValue(':id', $id, PDO::PARAM_INT);
+        $statement->execute();
+
+        return $statement->fetch(PDO::FETCH_ASSOC);
     }
 }

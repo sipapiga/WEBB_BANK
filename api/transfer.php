@@ -17,25 +17,28 @@ $data = json_decode(file_get_contents("php://input"));
 
 if (!empty($data->from_amount) && !empty($data->to_account)) {
 
-    // set product property values
-    $transaction->from_amount = $data->from_amount;
-    $transaction->account_id = $data->account_id;
-    $transaction->to_amount = $data->to_amount;
-    $transaction->to_account = $data->to_account;
-    $transaction->from_currency = $data->from_currency;
-    $transaction->to_currency = $data->to_currency;
-    $transaction->currency_rate = $data->currency_rate;
-    $transaction->date = date('Y-m-d H:i:s');
+    $balance = $transaction->getUserBalance($data->account_id);
+    
+    if ($balance > $data->from_amount) {
 
-    // Transfer completed
-    if ($transaction->transfer()) {
-        http_response_code(201);
-        echo json_encode(array("message" => "Transfer completed."));
+        // set product property values
+        $transaction->from_amount = $data->from_amount;
+        $transaction->account_id = $data->account_id;
+        $transaction->to_amount = $data->to_amount;
+        $transaction->to_account = $data->to_account;
+        $transaction->from_currency = $data->from_currency;
+        $transaction->to_currency = $data->to_currency;
+        $transaction->currency_rate = $data->currency_rate;
+        $transaction->date = date('Y-m-d H:i:s');
+    
+        // Transfer completed
+        if ($transaction->transfer()) {
+            http_response_code(201);
+            echo json_encode(array("message" => "Transfer completed."));
+        }
     }
-
     // unable to create
     else {
-
         http_response_code(503);
         echo json_encode(array("message" => "Unable to transfer."));
     }
