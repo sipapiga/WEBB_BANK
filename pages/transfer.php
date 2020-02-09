@@ -17,8 +17,8 @@
                                     </select>
                                 </div>
                                 <div class="form-group pt-5" style="margin-bottom:0px;" width="22%">
-                                    <input type="text" class="form-control" style="margin-bottom:0px;" name="balance"
-                                        id="balance" placeholder="Balance">
+                                    <input type="text" class="form-control" style="margin-bottom:0px;" name="amount"
+                                        id="amount" placeholder="Amount">
                                 </div>
                                 <div class="waves-input-wrapper waves-effect waves-light text-right mr-4 pt-5"><input
                                         name="submit" type="submit" value="Transfer" class="btn btn-primary"

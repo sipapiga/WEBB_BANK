@@ -6,9 +6,9 @@ include_once '../config/Database.php';
 include_once '../models/User.php';
 
 $db = new Database();
-$transaction = new User($db);
+$user = new User($db);
 
-$result = $transaction->getRecipient();
+$result = $user->getRecipient();
 
 $response = [
     'info' => [

@@ -19,68 +19,79 @@ class Bank
 
     public function readWithdrawalTransaction($id = null)
     {
-        // Setup query.
-        $sql = 'SELECT * FROM bank.transactions AS t
-        JOIN account ON account.id =t.from_account
-        JOIN users ON account.user_id = users.id
-        WHERE account.id = :account_id';
+        try {
 
-        $statement = $this->db->prepare($sql);
-        $statement->bindValue(':account_id', $id, PDO::PARAM_STR);
-        $statement->execute();
+            // Setup query.
+            $sql = 'SELECT * FROM bank.transactions AS t
+            JOIN account ON account.id =t.from_account
+            JOIN users ON account.user_id = users.id
+            WHERE account.id = :account_id';
 
-        $num = $statement->rowCount();
+            $statement = $this->db->prepare($sql);
+            $statement->bindValue(':account_id', $id, PDO::PARAM_STR);
+            $statement->execute();
 
-        if ($num > 0) {
+            $num = $statement->rowCount();
 
-            $transaction_arr['data'] = [];
-            while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-                extract($row);
-                $transaction_item = [
-                    'id' => $transaction_id,
-                    'date' => $date,
-                    'from' => $firstName,
-                    'to' => $to_account,
-                    'amount' => $to_amount,
-                ];
-                array_push($transaction_arr['data'], $transaction_item);
+            if ($num > 0) {
+
+                $transaction_arr['data'] = [];
+                while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                    $transaction_item = [
+                        'id' => $transaction_id,
+                        'date' => $date,
+                        'from' => $firstName,
+                        'to' => $to_account,
+                        'amount' => $to_amount,
+                    ];
+                    array_push($transaction_arr['data'], $transaction_item);
+                }
+
+                return $transaction_arr['data'];
             }
-
-            return $transaction_arr['data'];
+        } catch (\Exception $error) {
+            throw new \Exception("Failed : " . $error->getMessage());
         }
+
     }
 
     public function readDepositTransaction($id = null)
     {
-        // Setup query.
-        $sql = 'SELECT * FROM bank.transactions AS t
+        try {
+            // Setup query.
+            $sql = 'SELECT * FROM bank.transactions AS t
         JOIN account ON account.id =t.to_account
         JOIN users ON account.user_id = users.id
         WHERE account.id = :account_id';
 
-        $statement = $this->db->prepare($sql);
-        $statement->bindValue(':account_id', $id, PDO::PARAM_STR);
-        $statement->execute();
+            $statement = $this->db->prepare($sql);
+            $statement->bindValue(':account_id', $id, PDO::PARAM_STR);
+            $statement->execute();
 
-        $num = $statement->rowCount();
+            $num = $statement->rowCount();
 
-        if ($num > 0) {
+            if ($num > 0) {
 
-            $transaction_arr['data'] = [];
-            while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-                extract($row);
-                $transaction_item = [
-                    'id' => $transaction_id,
-                    'date' => $date,
-                    'from' => $from_account,
-                    'to' => $firstName,
-                    'amount' => $to_amount,
-                ];
-                array_push($transaction_arr['data'], $transaction_item);
+                $transaction_arr['data'] = [];
+                while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                    $transaction_item = [
+                        'id' => $transaction_id,
+                        'date' => $date,
+                        'from' => $from_account,
+                        'to' => $firstName,
+                        'amount' => $to_amount,
+                    ];
+                    array_push($transaction_arr['data'], $transaction_item);
+                }
+
+                return $transaction_arr['data'];
             }
-
-            return $transaction_arr['data'];
+        } catch (\Exception $error) {
+            throw new \Exception("Failed : " . $error->getMessage());
         }
+
     }
 
     public function transfer()
@@ -95,6 +106,10 @@ class Bank
 
             // Prepare query.
             $statement = $this->db->prepare($sql);
+            // sanitize
+            $this->from_amount = htmlspecialchars(strip_tags($this->from_amount));
+            $this->to_amount = htmlspecialchars(strip_tags($this->to_amount));
+            $this->to_account = htmlspecialchars(strip_tags($this->to_account));
 
             $statement->bindParam(":from_amount", $this->from_amount);
             $statement->bindParam(":account_id", $this->account_id);
@@ -106,7 +121,7 @@ class Bank
             $statement->bindParam(":date", $this->date);
 
             $balance = $this->getUserBalance($this->account_id);
-            
+
             if ($balance['balance'] > $this->from_amount) {
                 // execute query
                 $statement->execute();

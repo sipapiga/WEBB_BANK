@@ -18,7 +18,7 @@ $(document).ready(function () {
     function addTransfer(e) {
         e.preventDefault();
         let account_reciever_id = recipientName.options[recipientName.selectedIndex].value;
-        let balance = document.getElementById('balance').value;
+        let amount = document.getElementById('amount').value;
         let sender_id = $(".transaction").attr("id");
 
         fetch('http://localhost/WEBB_BANK/api/transfer.php', {
@@ -27,7 +27,7 @@ $(document).ready(function () {
                 'Accept': 'application/json,text/plain',
                 'Content-type': 'application/json'
             },
-            body: JSON.stringify({ from_amount: balance, account_id: sender_id, from_currency: "SEK", to_amount: balance, to_account: account_reciever_id, to_currency: "SEK", currency_rate: 1.000, date: "2020-02-01 00:35:07" })
+            body: JSON.stringify({ from_amount: amount, account_id: sender_id, from_currency: "SEK", to_amount: amount, to_account: account_reciever_id, to_currency: "SEK", currency_rate: 1.000, date: "2020-02-01 00:35:07" })
         })
             .then((res) => res.json())
             .then((data) => $('#info').html('<div class="alert alert-info fade show alert-dismissible">' + data.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'))
